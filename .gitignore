@@ -1,0 +1,13 @@
+# data
+base/test_data/*
+tutorial_notebook/save/*
+
+# __pycache__
+__pycache__/*
+*/__pycache__/*
+base/model/Temperature/__pycache__/*
+
+# others
+.DS_store
+.idea/*
+.ipynb_checkpoints/
