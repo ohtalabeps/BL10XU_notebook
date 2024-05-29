@@ -33,6 +33,8 @@ class T_dist:
         """
         df[df >= 12000] = 300
         df[df < 0] = 0
+        self.frame = df.shape[0]
+        self.pixel = df.shape[1]
         self.temp_df = df
 
     def return_T_profile(self, *, frame: int):
