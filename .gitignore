@@ -1,6 +1,6 @@
 # data
 tutorial_notebook/save/*
-base/notebook/model_test/*
+base/notebook/test/*
 !base/notebook/model_test/*.ipynb
 
 # __pycache__
