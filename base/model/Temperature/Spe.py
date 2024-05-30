@@ -38,47 +38,17 @@ x_calibration - wavelength information of x-axis
 the data will be automatically loaded and all important parameters and the data 
 can be requested from the object.
 """
-import numpy as np
-import tkinter as tk
-from tkinter import filedialog as fdialog
-#import matplotlib
-#matplotlib.use("TkAgg")
 
 import os
-import datetime
 from xml.dom.minidom import parseString
 import xml.etree.ElementTree as ET
 
-from typing import Dict
-
+from dateutil import parser
+import datetime
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy.polynomial.polynomial import polyval
-from dateutil import parser
-import matplotlib.pyplot as plt
 import pandas as pd
-
-"""自作plotモジュールの取り込み"""
-# import seaborn as sns
-# from Util.plot import plot_xy, plot_heatmap
-#
-# from Util.log import log_debug, log_info
-
-def get_files(root, mult=False):
-    """
-    Uses tkinter to allow UI source file selection
-    Adapted from: http://stackoverflow.com/a/7090747
-    """
-    root.withdraw()
-    root.overrideredirect(True)
-    root.geometry('0x0+0+0')
-    root.deiconify()
-    root.lift()
-    root.focus_force()
-    filepaths = fdialog.askopenfilenames()
-    if not mult:
-        filepaths = filepaths[0]
-    return filepaths
-
 
 class SpeFile(object):
     def __init__(self, *, filepath):
@@ -89,14 +59,10 @@ class SpeFile(object):
         directory
         """
         """"""
-        if filepath == None:
-            filename = get_files(root)
-        else:
-            filename = filepath
-        self.filename = filename
+        self.filename = filepath
         print(f"ファイル: {self.filename}")
         self.debug = False
-        self._fid = open(filename, 'rb')
+        self._fid = open(self.filename, 'rb')
         self._read_parameter()
         self._read_img()
         self.img = np.array(self.img) # list of 2d-ndarray -> 3d-ndarrayへの変換
@@ -476,6 +442,7 @@ class SpeFile(object):
             print(f"{self.calibration_date = }")
             print(f"{self.OD = }")
 
+    # TODO ここから下のメソッドはクラスに入れる必要ないので後から消す
     def set_intensity_array(self):
         frame_num = self.num_frames
         intensity_array_total = np.zeros(frame_num)
