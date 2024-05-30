@@ -121,11 +121,11 @@ class T_calib:
                      pixel = 512, # ROI対応する可能性があるので引数にしてる
                      wave_length_pixel = 512,
                      filename = 'CalibData.hdf5',
-                     hierarchy = 'temperature/calib_data'):
+                     hierarchy = 'temperature/'):
         df = self._load_calib_data()
         calib_arr = df['Intensity'].values.reshape((frame_num, pixel, wave_length_pixel)) # 3次元のnp配列になる
         with h5py.File(filename, 'w') as f:
-            f.create_dataset(hierarchy, data=calib_arr)
+            f.create_dataset(hierarchy + 'calib_data', data=calib_arr)
 
 if __name__ != "__main__":
     print(f"{__name__: <30} is imported")
