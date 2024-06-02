@@ -550,7 +550,7 @@ def imgobject(speobject, frame=0, roi=0):
     img = plt.imshow(getattr(speobject, 'data')[frame][roi], cmap=cm.get_cmap('hot'))
     return img
 
-def spe_info(spe:SpeFile) -> Dict:
+def spe_info(spe:SpeFile) -> dict:
     filepath = spe.filename
     filename = os.path.splitext(os.path.basename(filepath))[0]
 
