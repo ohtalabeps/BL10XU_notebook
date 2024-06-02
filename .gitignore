@@ -1,7 +1,7 @@
 # data
 tutorial_notebook/save/*
-base/notebook/model_test/*
-!base/notebook/model_test/*.ipynb
+base/notebook/test/*
+!base/notebook/test/*.ipynb
 
 # __pycache__
 __pycache__/*
