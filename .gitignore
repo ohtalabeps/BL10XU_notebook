@@ -1,12 +1,13 @@
 # data
-tutorial_notebook/save/*
+base/data
+base/early_studies
 base/notebook/test/*
 !base/notebook/test/*.ipynb
 
 # __pycache__
 __pycache__/*
 */__pycache__/*
-base/model/Temperature/__pycache__/*
+base/model/*/__pycache__/*
 
 # others
 .DS_store
