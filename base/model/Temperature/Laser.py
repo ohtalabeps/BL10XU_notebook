@@ -6,16 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# TODO
-# 1. このモジュールを実行した時 -> 単体のfigureを返す
-# 2. このモジュールが他で呼ばれた時(温度のところでなど) -> figが作ってる前提でaxを生成し，axオブジェクトを返す
-#    fig or axを引数に渡して，それを返して貰えばいいのか。
-# 2では温度にレーザーエネルギー変化を重ねてplotするイメージ
-# となると2ではy軸を２つ作る必要があり，x軸を共有する必要がある
-# TODO
-# linearでなくバースト加熱の時にも対応できるようにしたい
-# stepでそのままできるか。多分できなくて，フラグによる分岐が必要。
-
 class LaserProfile():
     def __init__(self):
         """
@@ -32,8 +22,8 @@ class LaserProfile():
         #         "residue-ms"       : 1000,
         #         "laser_diameter-um": 17.5
         # }
-        self.start_power = 10
-        self.goal_power = 50
+        self.start_power = None
+        self.goal_power = None
         self.delay = 1_000
         self.time_adjust = 100
         self.width = 8_000
@@ -60,61 +50,67 @@ class LaserProfile():
         self.step_x = (self.time_series + self.time_adjust) / 1000 #time(s), ユニバーサル演算
         self.step_y = np.r_[np.zeros(1), self.energy_series] #Total Energy(W), 先頭に0を追加している。np.r_は1次元配列の結合
 
-    def show_profile_plot(self) -> None:
+    def show_profile_plot(self, grid=True) -> None:
         figsize = (4, 4)
-        dpi = 200
+        dpi = 1000
         facecolor = 'white'
         
         fig = plt.figure(figsize=figsize, dpi=dpi, facecolor=facecolor)
         ax = fig.add_subplot(1, 1, 1)
         
-        color = 'red'
+        color = (1,0,0,1)# 'red'
+        linewidth = 1
         # TODO delay + timeadjustをx1みたいな変数にする。説明で図示を使えるし，ax.plotの可読性も上がる
         # 1. line1
         ax.plot(
                 [0, (self.delay + self.time_adjust) / 1000],
                 [0, 0],
-                color = color
+                color = color,
+                linewidth=linewidth
                 )
         # 2. step
         ax.step(
                 self.step_x,
                 self.step_y,
                 where = 'pre',
-                color = color
+                color = color,
                 # color = 'blue' # どこがstepで書かれているか知りたい時はこっちをコメントアウト
+                linewidth=linewidth
                 )
         # 3. line2
         ax.plot(
                 [(self.delay + self.time_adjust + self.width) / 1000, (self.delay + self.time_adjust + self.width) / 1000],
                 [self.goal_power - self.energy_step, 0],
-                color = color
+                color = color,
+                linewidth=linewidth
                 )
         # 4. line3
         ax.plot(
                 [(self.delay + self.time_adjust + self.width) / 1000, (self.delay + self.width + self.residue) / 1000],
                 [0, 0],
-                color = color
+                color = color,
+                linewidth=linewidth
                 )
         ax.set_title('Laser Profile')
         ax.set_xlabel('Time (s)')
         ax.set_ylabel('Total Power (W)')
-        ax.grid()# TODO ここのgridをoptionにする
+        if grid:
+            ax.grid()
 
 
     def overlap_laser_profile(self, ax) -> plt.axes:
         # 別のy軸で重ねる
-        # TODO speの方かこっちのx軸を変更して重なるようにする
         twin = ax.twinx()
-        color = 'red' # TODO これもoptionとして切り出す。plotオプション
+        color = (1,0,0,0.5)
+        linewidth = 1
         # TODO delay + timeadjustをx1みたいな変数にする。説明で図示を使えるし，ax.plotの可読性も上がる
-        # TODO ax.plotの部分をDRYにする。クラス内に切り出して，showとoverlapからはaxを渡す。
 
         # 1. line1
         twin.plot(
                 [0, (self.delay + self.time_adjust) / 1000],
                 [0, 0],
-                color = color
+                color = color,
+                linewidth=linewidth
                 )
         # 2. step
         twin.step(
@@ -122,22 +118,23 @@ class LaserProfile():
                 self.step_y,
                 where = 'pre',
                 color = color,
+                linewidth=linewidth,
                 label = 'Laser Power'
-                # color = 'blue' # どこがstepで書かれているか知りたい時はこっちをコメントアウト
                 )
         # 3. line2
         twin.plot(
                 [(self.delay + self.time_adjust + self.width) / 1000, (self.delay + self.time_adjust + self.width) / 1000],
                 [self.goal_power - self.energy_step, 0],
-                color = color
+                color = color,
+                linewidth=linewidth,
                 )
         # 4. line3
         twin.plot(
                 [(self.delay + self.time_adjust + self.width) / 1000, (self.delay + self.width + self.residue) / 1000],
                 [0, 0],
-                color = color
+                color = color,
+                linewidth=linewidth,
                 )
-        #twin.grid()# TODO ここのgridをoptionにする
         twin.legend()
 
         twin.set_ylabel('Total Power (W)')
@@ -146,10 +143,6 @@ class LaserProfile():
 
 
 if __name__ == "__main__":
-    """
-    想定: 
-        このモジュールを実行したとき
-    """
     print(" --------------------------------")
     print("|    Develop: Laser profile Plot   |")
     print(" --------------------------------\n")
