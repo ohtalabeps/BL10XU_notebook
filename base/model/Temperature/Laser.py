@@ -50,6 +50,46 @@ class LaserProfile():
         self.step_x = (self.time_series + self.time_adjust) / 1000 #time(s), ユニバーサル演算
         self.step_y = np.r_[np.zeros(1), self.energy_series] #Total Energy(W), 先頭に0を追加している。np.r_は1次元配列の結合
 
+        self._compute_arr() # 一括でplotできる配列を作成。↑は消すのめんどくさくて残してるだけ
+
+    def _compute_arr(self):
+        """時間配列"""
+        # start
+        time_arr = np.zeros(1)
+        # 加熱はじめ
+        time_arr = np.r_[time_arr, self.delay + self.time_adjust]
+        time_arr = np.r_[time_arr, self.delay + self.time_adjust]
+        # step加熱
+        # FIXME
+        #   time_adjustは一回にする
+        #   time_series[i+1]がわかりづらい。計算する
+        for i in range(int(self.step_num)):
+            time_arr = np.r_[time_arr, self.time_series[i + 1] + self.time_adjust]
+            time_arr = np.r_[time_arr, self.time_series[i + 1] + self.time_adjust]
+        # 加熱終わり
+        time_arr = np.r_[time_arr, time_arr[-1]]  # クエンチ
+        end_time = self.delay + self.width + self.residue
+        time_arr = np.r_[time_arr, end_time]
+        time_arr /= 1000
+        self.time_arr = time_arr
+
+        """エネルギー配列"""
+        # start
+        energy_arr = np.zeros(1)
+        # 加熱はじめ
+        energy_arr = np.r_[energy_arr, np.array([0])]
+        energy_arr = np.r_[energy_arr, self.start_power]
+        # step加熱
+        energy = self.start_power
+        for i in range(int(self.step_num)):
+            energy_arr = np.r_[energy_arr, energy]
+            energy += self.energy_step
+            energy_arr = np.r_[energy_arr, energy]
+        # 加熱終わり
+        energy_arr = np.r_[energy_arr, np.zeros(1)]
+        energy_arr = np.r_[energy_arr, np.zeros(1)]
+        self.energy_arr = energy_arr
+
     def show_profile_plot(self, grid=True) -> None:
         figsize = (4, 4)
         dpi = 1000
