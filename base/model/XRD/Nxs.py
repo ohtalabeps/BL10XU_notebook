@@ -21,6 +21,7 @@ class NxsFile:
             # logger.info(f"ファイル: {self.filepath_dist}")
         else:
             self.filepath = filepath
+            print(f"Load: {self.filepath}")
 
     """poniファイルの設定"""
     def get_poni(self, poni_path=None):

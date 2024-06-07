@@ -24,6 +24,14 @@ class T_calib:
         df.drop(['ROI', 'Column'], axis=1, inplace=True)
         return df
 
+    def return_calib_img(self, *,
+                         frame_num: int,
+                         pos_pixel_num = 512,
+                         wl_pixel_num = 512) -> np.array:
+        df = self._load_calib_data()
+        img = df['Intensity'].values.reshape((frame_num, pos_pixel_num, wl_pixel_num))
+        return img
+
     def get_pixel_integrated_array(self):
         df = self._load_calib_data()
         self.calib_intensity_arr = df.groupby('Row')['Intensity'].sum() #type: pd.Series
