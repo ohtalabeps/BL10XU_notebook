@@ -59,10 +59,7 @@ class NxsFile:
     def read_file(self):
         self.data_file = h5py.File(self.filepath, "r")
 
-    def show_data_path(self):
-        print('hoge')
-
-    def get_data(self, rotation=False):
+    def get_data(self, rotation=False): # これあとで消す
         print("データを読み込み中...")
         t1 = time.time()
 
