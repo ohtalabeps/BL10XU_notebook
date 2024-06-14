@@ -24,18 +24,16 @@ class NxsFile:
             print(f"Load: {self.filepath}")
 
     """poniファイルの設定"""
-    def get_poni(self, poni_path=None):
+    def set_poni(self, *, poni_path=None):
         if poni_path is None:
-            print("hoge")
+            raise ValueError("poni_path must be set.")
         else:
             self.poni_path = poni_path
-            print(f"{self.poni_path}")
-
-    def set_poni(self):
-        ai = AzimuthalIntegrator()
-        ai.load(self.poni_path)
-        print(f"\n{ai}\n")
-        self.ai = ai
+            print(f"Set: {self.poni_path}")
+            ai = AzimuthalIntegrator()
+            ai.load(self.poni_path)
+            print(f"\n{ai}\n")
+            self.ai = ai
 
     def rotate_poni_m90(self):
         # PONI1とPONI2を交換
@@ -43,7 +41,7 @@ class NxsFile:
         # rot1とrot2を交換し、符号を調整
         self.ai.rot1, self.ai.rot2 = self.ai.rot2, -self.ai.rot1
 
-    def adjust_poni(self, *, scale: dict):
+    def adjust_poni(self, *, scale: dict): # 本当はこれは使わないでやりたい
         if "poni1_scale" in scale:
             self.ai.poni1 *= scale["poni1_scale"]
         if "poni2_scale" in scale:
@@ -61,7 +59,10 @@ class NxsFile:
     def read_file(self):
         self.data_file = h5py.File(self.filepath, "r")
 
-    def get_data(self, rotation=False): # TODO rotationをどこで決めるか??
+    def show_data_path(self):
+        print('hoge')
+
+    def get_data(self, rotation=False):
         print("データを読み込み中...")
         t1 = time.time()
 
