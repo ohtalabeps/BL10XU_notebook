@@ -1,9 +1,6 @@
 """
 nxsとponiを読み込んで，cakingされたデータを読み出す
 """
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -14,14 +11,22 @@ from pyFAI.azimuthalIntegrator import AzimuthalIntegrator
 
 
 class NxsFile:
-    def __init__(self, filepath=None):
-        if filepath is None:
-            print("hoge")
-            # self.filepath_dist = get_files(root)
-            # logger.info(f"ファイル: {self.filepath_dist}")
+    def __init__(self, nxs_path=None, poni_path=None, mask_path=None):
+        self.filepath = nxs_path
+        print(f"Load Nexus: {self.filepath}")
+        if poni_path is not None:
+            self.set_poni(poni_path=poni_path)
+        if mask_path is not None:
+            self.set_mask(mask_path=mask_path)
+
+    def set_mask(self, *, mask_path=None):
+        if mask_path.endswith('.npy'):
+            self.mask = np.load(mask_path)
+            print(f"Set mask: {mask_path}")
+            print(f"\tMask shape: {self.mask.shape}")
         else:
-            self.filepath = filepath
-            print(f"Load: {self.filepath}")
+            raise Exception(f'Mask path {mask_path} not .npy\n実装してください')
+
 
     """poniファイルの設定"""
     def set_poni(self, *, poni_path=None):
@@ -29,10 +34,9 @@ class NxsFile:
             raise ValueError("poni_path must be set.")
         else:
             self.poni_path = poni_path
-            print(f"Set: {self.poni_path}")
+            print(f"Set poni: {self.poni_path}")
             ai = AzimuthalIntegrator()
             ai.load(self.poni_path)
-            print(f"\n{ai}\n")
             self.ai = ai
 
     def rotate_poni_m90(self):
