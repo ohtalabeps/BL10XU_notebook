@@ -4,6 +4,9 @@ base/early_studies
 base/notebook/test/*
 !base/notebook/test/*.ipynb
 
+# json
+base/notebook/lambda/setting.json
+
 # __pycache__
 __pycache__/*
 */__pycache__/*

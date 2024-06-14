@@ -84,6 +84,8 @@ class Read:
         # それぞれのpathをセットする
         print("使用するそれぞれのデータファイル名\n")
         for file in files:
+            if file.startswith('.'):
+                continue
             if '.spe' in file:
                 print(f"spe  : {file}\n")
                 self.spe_path = self.data_path + '/' + file
