@@ -7,6 +7,10 @@ base/notebook/test/*
 # json
 base/notebook/lambda/setting.json
 
+# notebook
+base/notebook/lambda/make_data_to_csv.ipynb
+base/notebook/lambda/plot_early_studies.ipynb
+
 # __pycache__
 __pycache__/*
 */__pycache__/*
