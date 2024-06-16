@@ -60,6 +60,7 @@ class HDF5:
             return result
         else: # 0個の場合
             print(f"\t-> 「{query}」を含むpathは見つかりませんでした。")
+            return None
 
     def return_data(self, data_path: str, shape: list = None):
         f = self.f

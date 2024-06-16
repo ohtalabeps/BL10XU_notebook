@@ -2,8 +2,6 @@
 形式は(格子体積, 温度) -> (圧力)で固定する
 """
 
-# FIXME このモデルが入ってるフォルダが誤字ってる。Calclation -> Calculation
-
 class EoS:
     """
     KCl:
