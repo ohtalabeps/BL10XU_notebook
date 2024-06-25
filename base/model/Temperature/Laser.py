@@ -64,7 +64,7 @@ class LaserProfile():
                     ele = time_list[-1] + self.step_width_ms # 時間を進める
                     time_list.append(ele) # 追加
                     time_list.append(ele) # レーザー出力のみ上がる
-                time_list.append(self.base_width_ms) # ここまで保つ
+                time_list.append(self.delay_ms + self.time_adjust_ms + self.base_width_ms) # ここまで保つ
                 time_list.append(time_list[-1]) # クエンチ
                 time_list.append(self.whole_time_ms) # 最後
             else:
